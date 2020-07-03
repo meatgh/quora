@@ -41,6 +41,9 @@ public class UserController {
         SignupUserResponse userResponse = new SignupUserResponse().id(createdUserEntity.getUuid()).status("REGISTERED");
         return new ResponseEntity<SignupUserResponse>(userResponse, HttpStatus.CREATED);
 
+        //JLT
+
+
 
 
     }
