@@ -13,6 +13,14 @@ import java.util.Date;
 
 @Entity
 @Table(name = "users", schema = "public")
+@NamedQueries(
+
+        {
+            @NamedQuery(name = "userByUsername", query = "select u from UserEntity u where u.userName= :userName"),
+            @NamedQuery(name = "userByEmail", query = "select u from UserEntity u where u.email= :email")
+
+        }
+)
 public class UserEntity implements Serializable {
 
 
