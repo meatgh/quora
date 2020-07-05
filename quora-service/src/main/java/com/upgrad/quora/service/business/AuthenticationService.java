@@ -4,6 +4,7 @@ import com.upgrad.quora.service.dao.UserDao;
 import com.upgrad.quora.service.entity.UserAuthTokenEntity;
 import com.upgrad.quora.service.entity.UserEntity;
 import com.upgrad.quora.service.exception.AuthenticationFailedException;
+import com.upgrad.quora.service.exception.SignOutRestrictedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -54,9 +55,14 @@ public class AuthenticationService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public UserAuthTokenEntity signout(final String userAuthToken){
+    public UserAuthTokenEntity signout(final String userAuthToken) throws SignOutRestrictedException {
+
 
         UserAuthTokenEntity signedoutAuthToken = userDao.getUserAuthToken(userAuthToken);
+        if(signedoutAuthToken == null ){
+            throw new SignOutRestrictedException("SGR-001", "User is not Signed in");
+        }
+
         signedoutAuthToken.setLogoutAt(ZonedDateTime.now());
         userDao.updateAuthToken(signedoutAuthToken);
         return signedoutAuthToken;
