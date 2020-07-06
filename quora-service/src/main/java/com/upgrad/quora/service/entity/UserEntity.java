@@ -4,6 +4,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,12 +14,17 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
+//@OnDelete(action = OnDeleteAction.CASCADE)
 @Table(name = "users", schema = "public")
 @NamedQueries(
 
         {
             @NamedQuery(name = "userByUsername", query = "select u from UserEntity u where u.userName= :userName"),
-            @NamedQuery(name = "userByEmail", query = "select u from UserEntity u where u.email= :email")
+            @NamedQuery(name = "userByEmail", query = "select u from UserEntity u where u.email= :email"),
+            //@NamedQuery(name = "deleteById", query = "delete from UserEntity u where u.id= :id"),
+            @NamedQuery(name = "userById", query = "select u from UserEntity u where u.id= :id"),
+            @NamedQuery(name = "userByUuid", query = "select u from UserEntity u where u.uuid = :uuid")
+           // @NamedQuery(name = "userByUuid", query = "select u from UserEntity u where u.uuid= :uuid")
 
         }
 )
@@ -52,6 +59,8 @@ public class UserEntity implements Serializable {
     @Column(name = "EMAIL")
     @NotNull
     private String email;
+
+
 
     @Column(name = "PASSWORD")
     @NotNull

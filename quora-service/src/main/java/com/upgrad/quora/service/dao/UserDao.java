@@ -39,6 +39,28 @@ public class UserDao {
         }
     }
 
+    public UserEntity getUserById(final Integer userId) {
+
+        try {
+            return entityManager.createNamedQuery("userById", UserEntity.class).setParameter("id", userId).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+
+    public UserEntity getUserByUuid(final String Uuid) {
+
+        try {
+
+            System.out.println("in the try block of user dao - getUserByUuid, before excectuion of Named query");
+            return entityManager.createNamedQuery("userByUuid", UserEntity.class).setParameter("uuid", Uuid).getSingleResult();
+
+        } catch (NoResultException nre) {
+            System.out.println("in the catch block of getUserByUuid - userDao");
+            return null;
+        }
+    }
+
     public UserAuthTokenEntity createAuthToken(final UserAuthTokenEntity userAuthTokenEntity){
         entityManager.persist(userAuthTokenEntity);
         return userAuthTokenEntity;
