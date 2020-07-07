@@ -24,7 +24,7 @@ public class AdminService {
         UserEntity userEntity = userDao.getUserByUuid(userId);
         //System.out.println(userEntity + "\n") ;
         UserAuthTokenEntity userAuthTokenEntity = userDao.getUserAuthToken(authToken);
-        System.out.println(userId + "  from the admin service \n") ;
+        //System.out.println(userId + "  from the admin service \n") ;
         UserEntity actionEntity = userDao.getUserByUuid((userAuthTokenEntity.getUuid()));
         String role = actionEntity.getRole();
 
