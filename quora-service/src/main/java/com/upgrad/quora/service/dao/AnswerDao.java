@@ -48,13 +48,13 @@ public class AnswerDao {
 
     }
 
-    public List<AnswerEntity> getAllAnswersToQuestion(Integer questionId){
-
-        TypedQuery<AnswerEntity> query = entityManager.createQuery("SELECT a from AnswerEntity a where a.question_id =:question_id", AnswerEntity.class).setParameter("question_id", questionId);
-        List<AnswerEntity> resultList = query.getResultList();
-
-        return resultList;
-
-
-    }
+//    public List<AnswerEntity> getAllAnswersToQuestion(QuestionEntity question){
+//
+//        TypedQuery<AnswerEntity> query = entityManager.createQuery("SELECT a from AnswerEntity a where ", AnswerEntity.class);
+//        List<AnswerEntity> resultList = query.getResultList();
+//
+//        return resultList;
+//
+//
+//    }
 }

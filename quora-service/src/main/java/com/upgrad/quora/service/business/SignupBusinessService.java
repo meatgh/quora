@@ -39,4 +39,11 @@ public class SignupBusinessService {
 
     }
 
+    @Transactional
+    public void updateUserDetails(UserEntity userEntity){
+
+        userDao.updateUser(userEntity);
+
+    }
+
 }

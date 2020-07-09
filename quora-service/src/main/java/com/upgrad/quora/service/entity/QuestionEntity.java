@@ -12,6 +12,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "question", schema = "public")
@@ -47,10 +49,21 @@ public class QuestionEntity implements Serializable {
     @Column(name = "UUID")
     private String uuid;
 
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private List<AnswerEntity> answers = new ArrayList<>();
+
     @Column(name = "CONTENT")
     @NotNull
     @Size(max = 500)
     private String content;
+
+    public List<AnswerEntity> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<AnswerEntity> answers) {
+        this.answers = answers;
+    }
 
     @Column(name = "date")
     @NotNull
@@ -60,6 +73,8 @@ public class QuestionEntity implements Serializable {
     @JoinColumn(name = "USER_ID")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private UserEntity user;
+
+
 
     public Integer getId() {
         return id;

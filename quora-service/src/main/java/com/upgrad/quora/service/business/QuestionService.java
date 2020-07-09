@@ -19,4 +19,9 @@ public class QuestionService {
         return questionDao.createQuestion(questionEntity);
 
     }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public QuestionEntity updateQuestion(QuestionEntity question){
+        return questionDao.updateQuestion(question);
+    }
 }

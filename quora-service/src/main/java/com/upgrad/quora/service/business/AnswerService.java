@@ -3,6 +3,7 @@ package com.upgrad.quora.service.business;
 import com.upgrad.quora.service.dao.AnswerDao;
 import com.upgrad.quora.service.dao.UserDao;
 import com.upgrad.quora.service.entity.AnswerEntity;
+import com.upgrad.quora.service.entity.QuestionEntity;
 import com.upgrad.quora.service.entity.UserAuthTokenEntity;
 import com.upgrad.quora.service.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,13 +51,13 @@ public class AnswerService {
 
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    public List<AnswerEntity> getAllAnswersToQuestion(Integer questionId){
-
-//        UserAuthTokenEntity userAuthTokenEntity = userDao.getUserAuthToken(authToken);
-//        UserEntity actioningUser = userDao.getUserByUuid((userAuthTokenEntity.getUuid()));
-        return answerDao.getAllAnswersToQuestion(questionId);
-
-
-    }
+//    @Transactional(propagation = Propagation.REQUIRED)
+//    public List<AnswerEntity> getAllAnswersToQuestion(QuestionEntity question){
+//
+////        UserAuthTokenEntity userAuthTokenEntity = userDao.getUserAuthToken(authToken);
+////        UserEntity actioningUser = userDao.getUserByUuid((userAuthTokenEntity.getUuid()));
+//        return answerDao.getAllAnswersToQuestion(question);
+//
+//
+//    }
 }

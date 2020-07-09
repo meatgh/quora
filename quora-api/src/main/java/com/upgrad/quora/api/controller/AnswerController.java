@@ -2,6 +2,7 @@ package com.upgrad.quora.api.controller;
 
 import com.upgrad.quora.api.model.*;
 import com.upgrad.quora.service.business.AnswerService;
+import com.upgrad.quora.service.business.QuestionService;
 import com.upgrad.quora.service.dao.AnswerDao;
 import com.upgrad.quora.service.dao.QuestionDao;
 import com.upgrad.quora.service.dao.UserDao;
@@ -37,6 +38,9 @@ public class AnswerController {
     @Autowired
     private AnswerDao answerDao;
 
+    @Autowired
+    private QuestionService questionService;
+
     @RequestMapping(method = RequestMethod.POST, path = "/question/{questionId}/answer/create", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<AnswerResponse> createAnswer(@PathVariable("questionId") final String questionId, AnswerRequest answerRequest, @RequestHeader("authorization")final String authorization){
 
@@ -51,6 +55,11 @@ public class AnswerController {
         answerEntity.setUser(user);
         answerEntity.setUuid(UUID.randomUUID().toString());
         answerService.createAnswer(answerEntity);
+        List<AnswerEntity> answers = question.getAnswers();
+        answers.add(answerEntity);
+        question.setAnswers(answers);
+        questionService.updateQuestion(question);
+
 
         AnswerResponse answerResponse = new AnswerResponse().id(answerEntity.getUuid()).status("ANSWER CREATED");
         return new ResponseEntity<AnswerResponse>(answerResponse, HttpStatus.OK);
@@ -88,15 +97,18 @@ public class AnswerController {
     public ResponseEntity<AnswerDetailsResponse> getAllAnswersToQuestion(@PathVariable("questionId")final String questionId, @RequestHeader("authorization")final String authorization){
 
         QuestionEntity question = questionDao.getUserByUuid(questionId);
+        List<AnswerEntity> allAnswers = question.getAnswers();
         UserAuthTokenEntity userAuthToken = userDao.getUserAuthToken(authorization);
-        Integer questionPK = question.getId();
-        List<AnswerEntity> answerContent = answerService.getAllAnswersToQuestion(questionPK);
-        ListIterator  li = answerContent.listIterator();
-        String answerContentString = null;
-        AnswerEntity tempAnswerEntity = new AnswerEntity();
+        //UserEntity user = userAuthToken.getUser();
+
+        //Integer questionPK = question.getId();
+        //List<AnswerEntity> answerContent = answerService.getAllAnswersToQuestion(question);
+        String answerContentString ="" ;
+        AnswerEntity tempAnswerEntity;
+        ListIterator  li = allAnswers.listIterator();
         while (li.hasNext()){
             tempAnswerEntity = (AnswerEntity) li.next();
-            answerContentString = answerContent + "\n" + tempAnswerEntity.getAns();
+            answerContentString = (answerContentString + " " + tempAnswerEntity.getAns());
 
         }
 

@@ -3,6 +3,8 @@ package com.upgrad.quora.api.controller;
 import com.upgrad.quora.api.model.QuestionRequest;
 import com.upgrad.quora.api.model.QuestionResponse;
 import com.upgrad.quora.service.business.QuestionService;
+import com.upgrad.quora.service.business.SignupBusinessService;
+import com.upgrad.quora.service.dao.QuestionDao;
 import com.upgrad.quora.service.dao.UserDao;
 import com.upgrad.quora.service.entity.QuestionEntity;
 import com.upgrad.quora.service.entity.UserAuthTokenEntity;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -29,6 +32,12 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
 
+    @Autowired
+    private QuestionDao questionDao;
+
+    @Autowired
+    private SignupBusinessService signupBusinessService;
+
     @RequestMapping(method = RequestMethod.POST, path = "/question/create", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<QuestionResponse> createQuestion(QuestionRequest questionRequest, @RequestHeader("authorization") final String authorization){
 
@@ -39,7 +48,14 @@ public class QuestionController {
         questionEntity.setContent(questionRequest.getContent());
         questionEntity.setUuid(UUID.randomUUID().toString());
         questionEntity.setDate(ZonedDateTime.now());
+
         questionService.createQuestion(questionEntity);
+        List<QuestionEntity> questions = questionOwner.getQuestions();
+        questions.add(questionEntity);
+        questionOwner.setQuestions(questions);
+        signupBusinessService.updateUserDetails(questionOwner);
+
+
 
         QuestionResponse createdQuestion = new QuestionResponse().id(questionEntity.getUuid()).status("QUESTION CREATED");
         return new ResponseEntity<QuestionResponse>( createdQuestion, HttpStatus.OK);

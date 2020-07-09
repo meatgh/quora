@@ -11,7 +11,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 //@OnDelete(action = OnDeleteAction.CASCADE)
@@ -87,6 +89,17 @@ public class UserEntity implements Serializable {
 
     @Column(name = "CONTACTNUMBER")
     private String contactNumber;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private List<QuestionEntity> questions = new ArrayList<>();
+
+    public List<QuestionEntity> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<QuestionEntity> questions) {
+        this.questions = questions;
+    }
 
     public int getId() {
         return id;
