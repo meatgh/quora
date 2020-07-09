@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class AnswerService {
 
@@ -45,6 +47,16 @@ public class AnswerService {
         }else{
             return null;
         }
+
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public List<AnswerEntity> getAllAnswersToQuestion(Integer questionId){
+
+//        UserAuthTokenEntity userAuthTokenEntity = userDao.getUserAuthToken(authToken);
+//        UserEntity actioningUser = userDao.getUserByUuid((userAuthTokenEntity.getUuid()));
+        return answerDao.getAllAnswersToQuestion(questionId);
+
 
     }
 }

@@ -18,12 +18,13 @@ import java.time.ZonedDateTime;
 @NamedQueries(
 
         {
-                @NamedQuery(name = "answerByUuid", query = "select a from AnswerEntity a where a.uuid = :uuid")
+                @NamedQuery(name = "answerByUuid", query = "select a from AnswerEntity a where a.uuid = :uuid"),
                 //@NamedQuery(name = "userByEmail", query = "select u from UserEntity u where u.email= :email"),
                 //@NamedQuery(name = "deleteById", query = "delete from UserEntity u where u.id= :id"),
                 //@NamedQuery(name = "userById", query = "select u from UserEntity u where u.id= :id"),
                 //@NamedQuery(name = "userByUuid", query = "select u from UserEntity u where u.uuid = :uuid")
                 // @NamedQuery(name = "userByUuid", query = "select u from UserEntity u where u.uuid= :uuid")
+               // @NamedQuery(name = "allAnswers", query = "select all from AnswerEntity all where all.question_id = :question_id")
 
         }
 )

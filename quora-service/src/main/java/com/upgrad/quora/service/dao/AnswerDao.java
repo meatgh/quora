@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import java.util.List;
 
 @Repository
 public class AnswerDao {
@@ -43,6 +45,16 @@ public class AnswerDao {
         } catch (NoResultException nre ) {
             return null;
         }
+
+    }
+
+    public List<AnswerEntity> getAllAnswersToQuestion(Integer questionId){
+
+        TypedQuery<AnswerEntity> query = entityManager.createQuery("SELECT a from AnswerEntity a where a.question_id =:question_id", AnswerEntity.class).setParameter("question_id", questionId);
+        List<AnswerEntity> resultList = query.getResultList();
+
+        return resultList;
+
 
     }
 }

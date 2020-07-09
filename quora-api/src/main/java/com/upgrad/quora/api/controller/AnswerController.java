@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.print.attribute.standard.Media;
 import java.time.ZonedDateTime;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.UUID;
 
 @RestController
@@ -82,6 +84,29 @@ public class AnswerController {
 
     }
 
+    @RequestMapping(method = RequestMethod.GET, path ="answer/all/{questionId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<AnswerDetailsResponse> getAllAnswersToQuestion(@PathVariable("questionId")final String questionId, @RequestHeader("authorization")final String authorization){
+
+        QuestionEntity question = questionDao.getUserByUuid(questionId);
+        UserAuthTokenEntity userAuthToken = userDao.getUserAuthToken(authorization);
+        Integer questionPK = question.getId();
+        List<AnswerEntity> answerContent = answerService.getAllAnswersToQuestion(questionPK);
+        ListIterator  li = answerContent.listIterator();
+        String answerContentString = null;
+        AnswerEntity tempAnswerEntity = new AnswerEntity();
+        while (li.hasNext()){
+            tempAnswerEntity = (AnswerEntity) li.next();
+            answerContentString = answerContent + "\n" + tempAnswerEntity.getAns();
+
+        }
+
+        AnswerDetailsResponse answerDetailsResponse = new AnswerDetailsResponse().id(questionId).questionContent(question.getContent()).answerContent(answerContentString);
+        return new ResponseEntity<>(answerDetailsResponse, HttpStatus.OK);
+
+
+
+
+    }
 
 
 
