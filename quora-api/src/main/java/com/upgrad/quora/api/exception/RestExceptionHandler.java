@@ -56,5 +56,13 @@ public class RestExceptionHandler {
         );
     }
 
+    @ExceptionHandler(AnswerNotFoundException.class)
+    public ResponseEntity<ErrorResponse> answerNotFoundException(AuthorizationFailedException anf, WebRequest request){
+
+        return new ResponseEntity<ErrorResponse>(
+                new ErrorResponse().code(anf.getCode()).message(anf.getErrorMessage()), HttpStatus.CONFLICT
+        );
+    }
+
 
 }

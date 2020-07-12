@@ -10,6 +10,7 @@ import com.upgrad.quora.service.entity.AnswerEntity;
 import com.upgrad.quora.service.entity.QuestionEntity;
 import com.upgrad.quora.service.entity.UserAuthTokenEntity;
 import com.upgrad.quora.service.entity.UserEntity;
+import com.upgrad.quora.service.exception.AnswerNotFoundException;
 import com.upgrad.quora.service.exception.AuthorizationFailedException;
 import com.upgrad.quora.service.exception.InvalidQuestionException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class AnswerController {
     private QuestionService questionService;
 
     @RequestMapping(method = RequestMethod.POST, path = "/question/{questionId}/answer/create", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<AnswerResponse> createAnswer(@PathVariable("questionId") final String questionId, AnswerRequest answerRequest, @RequestHeader("authorization")final String authorization){
+    public ResponseEntity<AnswerResponse> createAnswer(@PathVariable("questionId") final String questionId, AnswerRequest answerRequest, @RequestHeader("authorization")final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
 
         AnswerEntity answerEntity = new AnswerEntity();
         UserAuthTokenEntity userAuthToken = userDao.getUserAuthToken(authorization);
@@ -56,19 +57,19 @@ public class AnswerController {
         answerEntity.setQuestion(question);
         answerEntity.setUser(user);
         answerEntity.setUuid(UUID.randomUUID().toString());
-        answerService.createAnswer(answerEntity);
+        AnswerEntity createdAnswer = answerService.createAnswer(questionId, authorization, answerEntity);
         List<AnswerEntity> answers = question.getAnswers();
         answers.add(answerEntity);
         question.setAnswers(answers);
         questionService.updateQuestion(question);
 
 
-        AnswerResponse answerResponse = new AnswerResponse().id(answerEntity.getUuid()).status("ANSWER CREATED");
+        AnswerResponse answerResponse = new AnswerResponse().id(createdAnswer.getUuid()).status("ANSWER CREATED");
         return new ResponseEntity<AnswerResponse>(answerResponse, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.PUT, path = "/answer/edit/{answerId}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<AnswerEditResponse> editAnswerContent(@PathVariable("answerId") final String answerId, AnswerEditRequest answerEditRequest, @RequestHeader("authorization")final String authorization){
+    public ResponseEntity<AnswerEditResponse> editAnswerContent(@PathVariable("answerId") final String answerId, AnswerEditRequest answerEditRequest, @RequestHeader("authorization")final String authorization) throws AuthorizationFailedException, AnswerNotFoundException {
 
         AnswerEntity answerToEdit = answerDao.getAnswerByUuid(answerId);
         UserAuthTokenEntity userAuthToken = userDao.getUserAuthToken(authorization);
@@ -80,14 +81,14 @@ public class AnswerController {
         //answerToEdit.setQuestion(question);
         //answerToEdit.setUser(user);
         //answerToEdit.setUuid(answerId);
-        answerService.updateAnswer(answerToEdit);
+        answerService.updateAnswer(answerId, authorization, answerToEdit);
 
         AnswerEditResponse answerResponse = new AnswerEditResponse().id(answerToEdit.getUuid()).status("ANSWER EDITED");
         return new ResponseEntity<AnswerEditResponse>(answerResponse, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/answer/delete/{answerId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<AnswerDeleteResponse> deleteAnswer(@PathVariable("answerId")final String answerId, @RequestHeader("authorization")final String authorisation){
+    public ResponseEntity<AnswerDeleteResponse> deleteAnswer(@PathVariable("answerId")final String answerId, @RequestHeader("authorization")final String authorisation) throws AuthorizationFailedException, AnswerNotFoundException {
 
         AnswerEntity deletedAnswer = answerService.deleteAnswer(answerId, authorisation);
         AnswerDeleteResponse answerDeleteResponse = new AnswerDeleteResponse().id(deletedAnswer.getUuid()).status("ANSWER DELETED");
