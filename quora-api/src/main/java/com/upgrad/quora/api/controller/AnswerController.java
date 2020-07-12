@@ -10,6 +10,8 @@ import com.upgrad.quora.service.entity.AnswerEntity;
 import com.upgrad.quora.service.entity.QuestionEntity;
 import com.upgrad.quora.service.entity.UserAuthTokenEntity;
 import com.upgrad.quora.service.entity.UserEntity;
+import com.upgrad.quora.service.exception.AuthorizationFailedException;
+import com.upgrad.quora.service.exception.InvalidQuestionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -94,15 +96,15 @@ public class AnswerController {
     }
 
     @RequestMapping(method = RequestMethod.GET, path ="answer/all/{questionId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<AnswerDetailsResponse> getAllAnswersToQuestion(@PathVariable("questionId")final String questionId, @RequestHeader("authorization")final String authorization){
+    public ResponseEntity<AnswerDetailsResponse> getAllAnswersToQuestion(@PathVariable("questionId")final String questionId, @RequestHeader("authorization")final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
 
         QuestionEntity question = questionDao.getUserByUuid(questionId);
-        List<AnswerEntity> allAnswers = question.getAnswers();
-        UserAuthTokenEntity userAuthToken = userDao.getUserAuthToken(authorization);
+//        List<AnswerEntity> allAnswers = question.getAnswers();
+//        UserAuthTokenEntity userAuthToken = userDao.getUserAuthToken(authorization);
         //UserEntity user = userAuthToken.getUser();
 
         //Integer questionPK = question.getId();
-        //List<AnswerEntity> answerContent = answerService.getAllAnswersToQuestion(question);
+        List<AnswerEntity> allAnswers = answerService.getAllAnswersToQuestion(questionId, authorization);
         String answerContentString ="" ;
         AnswerEntity tempAnswerEntity;
         ListIterator  li = allAnswers.listIterator();
