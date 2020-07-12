@@ -40,13 +40,8 @@ public class AnswerService {
             throw new InvalidQuestionException("QUES-001", "The question entered is invalid");
         }
 
-        if(userAuthToken == null){
 
-            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
-
-        }
-
-        if(userAuthToken.getLogoutAt() == null){
+        if(userAuthToken.getLogoutAt() != null){
 
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to post an answer");
 
@@ -60,8 +55,6 @@ public class AnswerService {
 
         AnswerEntity answerToEdit = answerDao.getAnswerByUuid(answerId);
         UserAuthTokenEntity userAuthToken = userDao.getUserAuthToken(authorization);
-        UserEntity user = userDao.getUserByUuid(userAuthToken.getUuid());
-        QuestionEntity question = answerToEdit.getQuestion();
 
         if(userAuthToken == null){
 
@@ -69,20 +62,20 @@ public class AnswerService {
 
         }
 
+        UserEntity user = userDao.getUserByUuid(userAuthToken.getUuid());
+        QuestionEntity question = answerToEdit.getQuestion();
+
         if(userAuthToken.getLogoutAt() != null){
 
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to get the answers");
         }
 
-        if(answerToEdit.getUser().equals(user) != true){
+        if(answerToEdit.getUser().equals(user) != false){
 
             throw new AuthorizationFailedException("ATHR-003", "Only the answer owner can edit the answer");
         }
 
-        if(answerToEdit == null){
 
-            throw new AnswerNotFoundException("ANS-001", "Entered answer uuid does not exist");
-        }
          answerDao.updateAnswer(answerEntity);
     }
 

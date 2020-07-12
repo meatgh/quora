@@ -52,11 +52,11 @@ public class UserDao {
 
         try {
 
-            System.out.println("in the try block of user dao - getUserByUuid, before excectuion of Named query");
+            //System.out.println("in the try block of user dao - getUserByUuid, before excectuion of Named query");
             return entityManager.createNamedQuery("userByUuid", UserEntity.class).setParameter("uuid", Uuid).getSingleResult();
 
         } catch (NoResultException nre) {
-            System.out.println("in the catch block of getUserByUuid - userDao");
+            //System.out.println("in the catch block of getUserByUuid - userDao");
             return null;
         }
     }

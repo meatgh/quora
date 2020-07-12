@@ -49,7 +49,14 @@ public class AnswerController {
 
         AnswerEntity answerEntity = new AnswerEntity();
         UserAuthTokenEntity userAuthToken = userDao.getUserAuthToken(authorization);
+
+        if(userAuthToken == null){
+
+            throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
+
+        }
         QuestionEntity question = questionDao.getUserByUuid(questionId);
+
         UserEntity user = userDao.getUserByUuid(userAuthToken.getUuid());
 
         answerEntity.setAns(answerRequest.getAnswer());
@@ -75,6 +82,10 @@ public class AnswerController {
         UserAuthTokenEntity userAuthToken = userDao.getUserAuthToken(authorization);
 //        UserEntity user = userDao.getUserByUuid(userAuthToken.getUuid());
 //        QuestionEntity question = answerToEdit.getQuestion();
+        if(answerToEdit == null){
+
+            throw new AnswerNotFoundException("ANS-001", "Entered answer uuid does not exist");
+        }
 
         answerToEdit.setAns(answerEditRequest.getContent());
         //answerToEdit.setDate(ZonedDateTime.now());
