@@ -51,7 +51,7 @@ public class AnswerService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateAnswer(String answerId, String authorization, AnswerEntity answerEntity) throws AuthorizationFailedException, AnswerNotFoundException {
+    public void updateAnswer(AnswerEntity answerEntity, String authorization, String answerId) throws AuthorizationFailedException, AnswerNotFoundException {
 
         AnswerEntity answerToEdit = answerDao.getAnswerByUuid(answerId);
         UserAuthTokenEntity userAuthToken = userDao.getUserAuthToken(authorization);
@@ -61,21 +61,23 @@ public class AnswerService {
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
 
         }
-
+//
         UserEntity user = userDao.getUserByUuid(userAuthToken.getUuid());
+//
         QuestionEntity question = answerToEdit.getQuestion();
-
+//
         if(userAuthToken.getLogoutAt() != null){
 
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to get the answers");
         }
-
-        if(answerToEdit.getUser().equals(user) != false){
+//
+//
+        if(answerToEdit.getUser().getUuid() != user.getUuid() ){
 
             throw new AuthorizationFailedException("ATHR-003", "Only the answer owner can edit the answer");
         }
-
-
+//
+//        System.out.println("XXX checking if it is working XXX3");
          answerDao.updateAnswer(answerEntity);
     }
 
@@ -84,24 +86,21 @@ public class AnswerService {
 
         AnswerEntity answerToDelete = answerDao.getAnswerByUuid(answerId);
         UserAuthTokenEntity userAuthTokenEntity = userDao.getUserAuthToken(authToken);
-//        System.out.println(answerId + "  from the answer service \n");
-        UserEntity actioningUser = userDao.getUserByUuid((userAuthTokenEntity.getUuid()));
-        String role = actioningUser.getRole();
 
         if(userAuthTokenEntity == null){
 
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
 
         }
+//        System.out.println(answerId + "  from the answer service \n");
+        UserEntity actioningUser = userDao.getUserByUuid((userAuthTokenEntity.getUuid()));
+        String role = actioningUser.getRole();
+
+
 
         if(userAuthTokenEntity.getLogoutAt() != null){
 
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to delete an answer");
-        }
-
-        if(role.equals("admin") != true || answerToDelete.getUser().equals(actioningUser) != true){
-
-            throw new AuthorizationFailedException("ATHR-003", "Only the answer owner or admin can delete the answer");
         }
 
         if(answerToDelete == null){
@@ -109,7 +108,17 @@ public class AnswerService {
             throw new AnswerNotFoundException("ANS-001", "Entered answer uuid does not exist");
         }
 
-        return answerDao.deleteAnswer(answerId);
+        if(role.equals("admin") == true || answerToDelete.getUser().getUuid() == actioningUser.getUuid()){
+
+            return answerDao.deleteAnswer(answerId);
+
+        }else{
+            throw new AuthorizationFailedException("ATHR-003", "Only the answer owner or admin can delete the answer");
+        }
+
+
+
+
 
     }
 
