@@ -31,7 +31,7 @@ public class RestExceptionHandler {
     public ResponseEntity<ErrorResponse> signoutRestrictedException(SignOutRestrictedException sore, WebRequest request){
 
         return new ResponseEntity<ErrorResponse>(
-                new ErrorResponse().code(sore.getCode()).message(sore.getErrorMessage()), HttpStatus.NOT_FOUND
+                new ErrorResponse().code(sore.getCode()).message(sore.getErrorMessage()), HttpStatus.UNAUTHORIZED
         );
     }
 

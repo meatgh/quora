@@ -91,12 +91,7 @@ public class AnswerController {
         }
 
         answerToEdit.setAns(answerEditRequest.getContent());
-        //answerToEdit.setDate(ZonedDateTime.now());
-        //answerToEdit.setQuestion(question);
-        //answerToEdit.setUser(user);
-        //answerToEdit.setUuid(answerId);
         answerService.updateAnswer(answerToEdit, authorization, answerId);
-
         AnswerEditResponse answerResponse = new AnswerEditResponse().id(answerToEdit.getUuid()).status("ANSWER EDITED");
         return new ResponseEntity<AnswerEditResponse>(answerResponse, HttpStatus.OK);
     }
