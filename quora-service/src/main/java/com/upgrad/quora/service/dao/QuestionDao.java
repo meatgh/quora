@@ -28,7 +28,7 @@ public class QuestionDao {
             return entityManager.createNamedQuery("questionByUuid", QuestionEntity.class).setParameter("uuid", Uuid).getSingleResult();
 
         } catch (NoResultException nre) {
-            System.out.println("in the catch block of getUserByUuid - QuestionDao");
+            //System.out.println("in the catch block of getUserByUuid - QuestionDao");
             return null;
         }
     }

@@ -21,9 +21,9 @@ public class AdminDao {
     public UserEntity deleteUser(String userId){
 
         //UserEntity deletedEntity = userDao.getUserById(userId);
-        System.out.println(userId +"from Admin dao, first line");
+        //System.out.println(userId +"from Admin dao, first line");
         UserEntity deletedEntity = userDao.getUserByUuid(userId);
-        System.out.println(userId + " admin dao second print statement");
+        //System.out.println(userId + " admin dao second print statement");
 
         try {
 

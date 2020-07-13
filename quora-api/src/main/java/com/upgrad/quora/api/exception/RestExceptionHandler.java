@@ -15,7 +15,7 @@ public class RestExceptionHandler {
     public ResponseEntity<ErrorResponse> signUpRestrictedException(SignUpRestrictedException sure, WebRequest request){
 
         return new ResponseEntity<ErrorResponse>(
-                new ErrorResponse().code(sure.getCode()).message(sure.getErrorMessage()), HttpStatus.CONFLICT
+                new ErrorResponse().code(sure.getCode()).message(sure.getErrorMessage()), HttpStatus.FORBIDDEN
         );
     }
 
