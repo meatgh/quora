@@ -31,37 +31,25 @@ public class RestExceptionHandler {
     public ResponseEntity<ErrorResponse> signoutRestrictedException(SignOutRestrictedException sore, WebRequest request){
 
         return new ResponseEntity<ErrorResponse>(
-                new ErrorResponse().code(sore.getCode()).message(sore.getErrorMessage()), HttpStatus.CONFLICT
+                new ErrorResponse().code(sore.getCode()).message(sore.getErrorMessage()), HttpStatus.NOT_FOUND
         );
     }
-
-    //Question feature related exceptinos
-
-    @ExceptionHandler(InvalidQuestionException.class)
-    public ResponseEntity<ErrorResponse> authorizationFailedException(InvalidQuestionException iqe, WebRequest request){
-
-        return new ResponseEntity<ErrorResponse>(
-                new ErrorResponse().code(iqe.getCode()).message(iqe.getErrorMessage()), HttpStatus.CONFLICT
-        );
-    }
-
-
-    //Answer feature related exceptions
 
     @ExceptionHandler(AuthorizationFailedException.class)
-    public ResponseEntity<ErrorResponse> authorizationFailedException(AuthorizationFailedException afe, WebRequest request){
-
-        return new ResponseEntity<ErrorResponse>(
-                new ErrorResponse().code(afe.getCode()).message(afe.getErrorMessage()), HttpStatus.CONFLICT
-        );
+    public ResponseEntity<ErrorResponse> authorizationFailedException(AuthorizationFailedException afe,WebRequest webRequest){
+        return new ResponseEntity<ErrorResponse>(new ErrorResponse().code(afe.getCode()).message(afe.getErrorMessage()),HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler(AnswerNotFoundException.class)
-    public ResponseEntity<ErrorResponse> answerNotFoundException(AnswerNotFoundException anf, WebRequest request){
+    @ExceptionHandler(InvalidQuestionException.class)
+    public ResponseEntity<ErrorResponse> invalidQuestionException(InvalidQuestionException iqe,WebRequest webRequest){
+        return new ResponseEntity<ErrorResponse>(new ErrorResponse().code(iqe.getCode()).message(iqe.getErrorMessage()),HttpStatus.NOT_FOUND);
 
-        return new ResponseEntity<ErrorResponse>(
-                new ErrorResponse().code(anf.getCode()).message(anf.getErrorMessage()), HttpStatus.CONFLICT
-        );
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> userNotFoundException(UserNotFoundException unfe,WebRequest webRequest){
+        return new ResponseEntity<ErrorResponse>(new ErrorResponse().code(unfe.getCode()).message(unfe.getErrorMessage()),HttpStatus.NOT_FOUND);
+
     }
 
 

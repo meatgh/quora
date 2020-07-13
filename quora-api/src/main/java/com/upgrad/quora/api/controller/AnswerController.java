@@ -111,9 +111,7 @@ public class AnswerController {
     public ResponseEntity<AnswerDetailsResponse> getAllAnswersToQuestion(@PathVariable("questionId")final String questionId, @RequestHeader("authorization")final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
 
         QuestionEntity question = questionDao.getUserByUuid(questionId);
-//        List<AnswerEntity> allAnswers = question.getAnswers();
-//        UserAuthTokenEntity userAuthToken = userDao.getUserAuthToken(authorization);
-        //UserEntity user = userAuthToken.getUser();
+
 
         //Integer questionPK = question.getId();
         List<AnswerEntity> allAnswers = answerService.getAllAnswersToQuestion(questionId, authorization);

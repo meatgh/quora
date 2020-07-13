@@ -25,9 +25,9 @@ public class SignupBusinessService {
         UserEntity usernameCheckEntity = userDao.getUserByUsername(userEntity.getUserName());
 
         //using the created entities for a duplication check, if it is not null, it means there's already a user record with that email address
-        if( emailCheckEntity != null ){ throw new SignUpRestrictedException("SGR-001", "This user has already been registered, try with any other emailId"); }
+        if( emailCheckEntity != null ){ throw new SignUpRestrictedException("SGR-002", "This user has already been registered, try with any other emailId"); }
         //using the created entities for a duplication check, if it is not null, it means there's already a user record with that username
-        if( usernameCheckEntity != null ){  throw new SignUpRestrictedException("SGR-002","Try any other Username, this Username has already been taken"); }
+        if( usernameCheckEntity != null ){  throw new SignUpRestrictedException("SGR-001","Try any other Username, this Username has already been taken"); }
 
         //After all the checks are done, finally, creating and signing up the user
         String[] encryptedText = cryptographyProvider.encrypt(userEntity.getPassword());
