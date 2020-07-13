@@ -20,12 +20,15 @@ import java.util.List;
 @NamedQueries(
 
         {
-                @NamedQuery(name = "questionByUuid", query = "select q from QuestionEntity q where q.uuid = :uuid")
+                @NamedQuery(name = "questionByUuid", query = "select q from QuestionEntity q where q.uuid = :uuid"),
                 //@NamedQuery(name = "userByEmail", query = "select u from UserEntity u where u.email= :email"),
                 //@NamedQuery(name = "deleteById", query = "delete from UserEntity u where u.id= :id"),
                 //@NamedQuery(name = "userById", query = "select u from UserEntity u where u.id= :id"),
                 //@NamedQuery(name = "userByUuid", query = "select u from UserEntity u where u.uuid = :uuid")
                 // @NamedQuery(name = "userByUuid", query = "select u from UserEntity u where u.uuid= :uuid")
+                @NamedQuery(name="getPostedQuestion",query = "SELECT c FROM QuestionEntity c"),
+                @NamedQuery(name="getQuestionByUser",query = "SELECT q FROM QuestionEntity q where q.user.uuid=:uuid"),
+                @NamedQuery(name="getQuestionId",query = "SELECT qd FROM QuestionEntity qd where qd.uuid= :uuid")
 
         }
 )

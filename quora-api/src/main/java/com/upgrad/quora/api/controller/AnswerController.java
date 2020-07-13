@@ -2,7 +2,7 @@ package com.upgrad.quora.api.controller;
 
 import com.upgrad.quora.api.model.*;
 import com.upgrad.quora.service.business.AnswerService;
-import com.upgrad.quora.service.business.QuestionService;
+import com.upgrad.quora.service.business.QuestionBusinessService;
 import com.upgrad.quora.service.dao.AnswerDao;
 import com.upgrad.quora.service.dao.QuestionDao;
 import com.upgrad.quora.service.dao.UserDao;
@@ -19,7 +19,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.attribute.standard.Media;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.ListIterator;
@@ -44,7 +43,7 @@ public class AnswerController {
     private AnswerDao answerDao;
 
     @Autowired
-    private QuestionService questionService;
+    private QuestionBusinessService questionBusinessService;
 
     //Takes the answerRequest form the UI along with the question id and authorization token, interacts with the service after creating an answer entity for it to be persisted in the DB
     @RequestMapping(method = RequestMethod.POST, path = "/question/{questionId}/answer/create", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -71,7 +70,7 @@ public class AnswerController {
         List<AnswerEntity> answers = question.getAnswers();
         answers.add(answerEntity);
         question.setAnswers(answers);
-        questionService.updateQuestion(question);
+        questionBusinessService.updateQuestion(question);
 
 
         AnswerResponse answerResponse = new AnswerResponse().id(createdAnswer.getUuid()).status("ANSWER CREATED");
