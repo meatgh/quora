@@ -27,14 +27,18 @@ public class AdminService {
         //System.out.println(userEntity + "\n") ;
         UserAuthTokenEntity userAuthTokenEntity = userDao.getUserAuthToken(authorization);
 //        System.out.println(userId + "  from the admin service \n") ;
-        UserEntity actionEntity = userDao.getUserByUuid((userAuthTokenEntity.getUuid()));
-        String role = actionEntity.getRole();
-
-        if(userAuthTokenEntity.getAccessToken() == null){
+        boolean authTokenEntityCheck = userAuthTokenEntity == null;
+        if(authTokenEntityCheck){
 
             throw new AuthorizationFailedException("ATHR-001", "User has not signed in");
 
-        } else if(userAuthTokenEntity.getLogoutAt() != null){
+        }
+
+        UserEntity actionEntity = userDao.getUserByUuid((userAuthTokenEntity.getUuid()));
+
+        String role = actionEntity.getRole();
+
+         if(userAuthTokenEntity.getLogoutAt() != null){
 
             throw new AuthorizationFailedException("ATHR-002", "User is signed out");
 

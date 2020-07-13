@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.UUID;
 
+//This controller handles all the Endpoints related to the Answers feature of this application
+
 @RestController
 @RequestMapping("/")
 public class AnswerController {
@@ -44,6 +46,7 @@ public class AnswerController {
     @Autowired
     private QuestionService questionService;
 
+    //Takes the answerRequest form the UI along with the question id and authorization token, interacts with the service after creating an answer entity for it to be persisted in the DB
     @RequestMapping(method = RequestMethod.POST, path = "/question/{questionId}/answer/create", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<AnswerResponse> createAnswer(@PathVariable("questionId") final String questionId, AnswerRequest answerRequest, @RequestHeader("authorization")final String authorization) throws AuthorizationFailedException, InvalidQuestionException {
 

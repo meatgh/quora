@@ -86,6 +86,7 @@ public class AnswerService {
 
         AnswerEntity answerToDelete = answerDao.getAnswerByUuid(answerId);
         UserAuthTokenEntity userAuthTokenEntity = userDao.getUserAuthToken(authToken);
+        boolean answerToDeleteCheck = answerToDelete == null;
 
         if(userAuthTokenEntity == null){
 
@@ -103,7 +104,7 @@ public class AnswerService {
             throw new AuthorizationFailedException("ATHR-002", "User is signed out.Sign in first to delete an answer");
         }
 
-        if(answerToDelete == null){
+        if(answerToDeleteCheck){
 
             throw new AnswerNotFoundException("ANS-001", "Entered answer uuid does not exist");
         }
